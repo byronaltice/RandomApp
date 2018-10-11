@@ -1,0 +1,7 @@
+{
+  "name": "RandomApp",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
