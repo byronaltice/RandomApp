@@ -1,16 +1,37 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+
+export enum ApiEndpoint {
+  Items,
+  Messages
+}
+class ApiEndpointInfo {
+  endpoint: string
+  constructor(endpoint: string) {
+    this.endpoint = '/' + endpoint;
+  }
+}
+interface ApiEndpointInfoMap {
+  dataEndpoints: Map<ApiEndpoint, ApiEndpointInfo>
+}
+
+
 /**
  * Api is a generic REST Api handler. Set your API url first.
  */
 @Injectable()
 export class Api {
   url: string = 'https://example.com/api/v1';
-
+  public apiEndpointInfoMap: Map<ApiEndpoint, ApiEndpointInfo> = new Map<ApiEndpoint, ApiEndpointInfo>([
+    [ApiEndpoint.Items, new ApiEndpointInfo('items')],
+    [ApiEndpoint.Messages, new ApiEndpointInfo('messages')]
+  ]);
   constructor(public http: HttpClient) {
   }
-
+  getv2(apiEndpoint: ApiEndpoint) {
+    return this.http.get(this.url + '/' + this.apiEndpointInfoMap[apiEndpoint]);
+  }
   get(endpoint: string, params?: any, reqOpts?: any) {
     if (!reqOpts) {
       reqOpts = {
